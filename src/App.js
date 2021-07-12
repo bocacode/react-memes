@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react"
+import MemeCard from "./components/MemeCard"
 
 function App() {
+  const [memeList, setMemeList] = useState(null)
+  useEffect(() => {
+    fetch('https://meme-api-bc.web.app/memes')
+      .then(response => response.json())
+      .then(data => setMemeList(data))
+      .catch(err => console.error(err))
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <h1>These are the Memes</h1>
+      {!memeList
+        ? <h2>Loading...</h2>
+        : <div>
+            {memeList.map((meme) => <MemeCard meme={meme} key={meme.id} />)}
+        </div>
+      }
+    </>
+  )
 }
 
-export default App;
+export default App
